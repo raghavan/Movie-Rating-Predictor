@@ -6,8 +6,7 @@ from sklearn import linear_model,svm,naive_bayes
 from scipy.io import arff
 import pylab as pl
 import pickle
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import precision_recall_fscore_support
+from sklearn.metrics import mean_squared_error
 
 class DataModeller:
     
@@ -27,22 +26,23 @@ class DataModeller:
         yTest = testData[:,10]
                 
         linReg = linear_model.LinearRegression();
-        linReg.fit(xTrain, yTrain);
+        linReg.fit(xTrain, yTrain,n_jobs=-1);
         yPred = linReg.predict(xTest); 
-        
-        for i in range(0,len(yPred)):
-            print str(yPred[i]) +"    "+ str(yTest[i]);
+            
+        outputFile = open("../files/predictedratings.csv", 'w+')
+        rows = len(yPred)
+        outputFile.write("Predicted,Actual\n");
+        for i in range(0,rows):
+            outputFile.write(str(yPred[i]) +","+ str(yTest[i])+"\n")
+        outputFile.close()
                    
         score =  linReg.score(xTest,yTest);
         print "Linear regression score(1.0 is best) = ",score;
-        
-        errorRateLin = np.sqrt(np.mean(np.power(yPred - yTest,2)))
-        print "RMSE(Shows the deviation from 0) "+str(errorRateLin)
-        
-        
-                    
+                
+        print "RMSE(0.0 best score) ",mean_squared_error(yTest,yPred);
         
         
+                           
 if __name__ == '__main__':
     if len(sys.argv) < 2:       
         print 'python datamodeller.py <training-file-path>  <test-file-path>'
