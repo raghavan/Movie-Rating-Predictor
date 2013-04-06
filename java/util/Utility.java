@@ -14,7 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utility {
 
@@ -66,17 +67,6 @@ public class Utility {
 		return fileRecords;
 	}
 
-	
-
-	private static String reconstructTweet(List<String> words) {
-		StringBuffer newStr = new StringBuffer();
-		for (String word : words) {
-			newStr.append(word);
-			newStr.append(" ");
-		}
-		return newStr.toString().trim();
-	}
-
 	public static void writeDataToFile(String fileName, List<String> content) {
 		FileWriter fstream = null;
 		BufferedWriter out = null;
@@ -99,5 +89,29 @@ public class Utility {
 		}
 	}
 
+	public static List<Integer> getYearFromString(String info) {
+		List<Integer> years = new ArrayList<Integer>();
+		Pattern pattern = Pattern.compile("\\d{4}");
+		Matcher matcher = pattern.matcher(info);
+		while (matcher.find()) {
+			String yearString = matcher.group(0);
+			Integer year = Integer.parseInt(yearString);
+			years.add(year);
+		}
+		return years;
+	}
+
+	public static Integer getSalaryFromString(String info) {
+		info = info.replace(",", "");
+		Pattern pattern = Pattern.compile("\\$\\d+");
+		Matcher matcher = pattern.matcher(info);
+		if (matcher.find()) {
+			String salaryString = matcher.group(0);
+			salaryString = salaryString.replace("$", "");
+			Integer salary = Integer.parseInt(salaryString);
+			return salary;
+		}
+		return null;
+	}
 
 }

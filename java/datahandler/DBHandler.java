@@ -1,6 +1,7 @@
 package datahandler;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,16 +10,14 @@ import java.util.List;
 
 import util.Constants;
 
+import model.InfoDetail;
 import model.Movie;
+import model.PersonInfoMap;
 
 import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
 
+public class DBHandler {
 
-
-
-public class DBHandler{
-	
-	
 	public List<Movie> getAllMoviesWithRatingVotingDistrib() {
 		String query = Constants.QUERY_GET_RECORDS_WITH_RATING_DISTRIB_VOTES;
 		List<Movie> movies = new ArrayList<Movie>();
@@ -27,7 +26,49 @@ public class DBHandler{
 			movies = makeMovieFromResultSet(results);
 		}
 		return movies;
-	} 
+	}
+
+	public PersonInfoMap getPersonInfoForGivenQuery(String query, int infoTypeId) {
+		PersonInfoMap personInfoMap = new PersonInfoMap();
+		if (query != null) {
+			PreparedStatement ps;
+			try {
+				ps = DBConnect.getConnection().prepareStatement(query + "?;");
+				ps.setInt(1, infoTypeId);
+				ResultSet results = ps.executeQuery();
+				personInfoMap = makePersonFromResultSet(results);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return personInfoMap;
+
+	}
+
+	private PersonInfoMap makePersonFromResultSet(ResultSet results) {
+		PersonInfoMap personInfoMap = new PersonInfoMap();
+		if (results != null) {
+			try {
+				while (results.next()) {
+					int personId = results.getInt("person_id");
+					InfoDetail infoDetail = new InfoDetail();
+					infoDetail.setInfo(results.getString("info"));
+					infoDetail.setInfoTypeId(results.getInt("info_type_id"));
+					infoDetail.setRecordId(results.getInt("id"));
+					personInfoMap.addPersonInfoDetail(personId, infoDetail);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					results.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return personInfoMap;
+	}
 
 	private List<Movie> makeMovieFromResultSet(ResultSet results) {
 		List<Movie> movies = new ArrayList<Movie>();
@@ -46,7 +87,7 @@ public class DBHandler{
 			} finally {
 				try {
 					results.close();
-				} catch (SQLException e) {					
+				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 			}
@@ -69,5 +110,4 @@ public class DBHandler{
 		return rs;
 	}
 
-	
 }
