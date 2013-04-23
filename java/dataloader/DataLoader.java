@@ -50,7 +50,7 @@ public class DataLoader {
 
 			for (InfoDetail infoDetail : personInfoMap.getInfoDetails(personId)) {
 				List<Integer> years = Utility.getYearFromString(infoDetail.getInfo());
-				int movieYear = getAnyYearMatchingThreshold(years);
+				int movieYear = Utility.getAnyYearMatchingThreshold(years);
 				Integer salary = Utility.getSalaryFromString(infoDetail.getInfo()); 
 				if(movieYear != 0 || salary != null){
 					String updateStmt = "insert into person_movie_salary(person_id,salary_unnormalized,movie_year) values ("+
@@ -77,7 +77,7 @@ public class DataLoader {
 			int count = 0;
 			for (InfoDetail infoDetail : personInfoMap.getInfoDetails(personId)) {
 				List<Integer> years = Utility.getYearFromString(infoDetail.getInfo());
-				if (getAnyYearMatchingThreshold(years) != 0) {
+				if (Utility.getAnyYearMatchingThreshold(years) != 0) {
 					count += 1;
 				}
 			}
@@ -94,15 +94,5 @@ public class DataLoader {
 		return updateStmt;
 	}
 
-	private static int getAnyYearMatchingThreshold(List<Integer> years) {
-		if (years != null && years.size() > 0) {
-			for (Integer year : years) {
-				if (year != 0 && year < Constants.TRAINING_THRESHOLD_YEAR) {
-					return year;
-				}
-			}
-		}
-		return 0;
-	}
 
 }

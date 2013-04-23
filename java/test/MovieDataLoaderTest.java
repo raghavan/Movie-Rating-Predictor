@@ -20,9 +20,9 @@ public class MovieDataLoaderTest {
 			str = str.replace("\"", "");
 			str = str.replace(":", "");
 			Integer yearInt = -1;
-			try{
+			try {
 				yearInt = Integer.parseInt(str);
-			}catch(NumberFormatException e){
+			} catch (NumberFormatException e) {
 				System.out.println(str);
 			}
 			int count = 0;
@@ -32,35 +32,46 @@ public class MovieDataLoaderTest {
 			count += 1;
 			yearCount.put(yearInt, count);
 		}
-		
-		for(Integer yr : yearCount.keySet()){
-			System.out.println(yr + " "+yearCount.get(yr));
+
+		for (Integer yr : yearCount.keySet()) {
+			System.out.println(yr + " " + yearCount.get(yr));
 		}
 	}
-	
+
 	@Test
-	public void testGetYearFromString(){
-		String info = "_\"The Abbott and Costello Show\" (1952)_ (qv)::$1534,00/episode";
+	public void testGetYearFromString() {
+		String info = "Sun Stations\" (USA), 16 November 1995, pg. 1, by: Mary Jane Skala, \"She's Truly Royalty on Skates";
 		System.out.println(Utility.getYearFromString(info));
 	}
-	
-	
-	
+
 	@Test
-	public void testMakeUpdateStmtsForArticleCount(){
-		List<String> updateStmts = DataLoader.getPersonInfoCountUpdateStmts(Constants.QUERY_GET_PERSON_INFO, Constants.INFO_ARTCILE,
-				Constants.COLUMN_PERSON_IN_MOVIE_ARTICLE, Constants.FILE_PERSON_ARTICLE_COUNT_UPDATE_STMT);
+	public void testMakeUpdateStmtsForArticleCount() {
+		List<String> updateStmts = DataLoader.getPersonInfoCountUpdateStmts(Constants.QUERY_GET_PERSON_INFO,
+				Constants.INFO_ARTCILE, Constants.COLUMN_PERSON_IN_MOVIE_ARTICLE,
+				Constants.FILE_PERSON_ARTICLE_COUNT_UPDATE_STMT);
 	}
-	
+
 	@Test
-	public void testGetSalaryRegex(){
+	public void testGetSalaryRegex() {
 		String info = "_\"The Abbott and Costello Show\" (1952)_ (qv)::$15,000/episode";
 		System.out.println(Utility.getSalaryFromString(info));
 	}
-	
+
 	@Test
-	public void testMakeInsertStmtsForPersonMovie(){
+	public void testMakeInsertStmtsForPersonMovie() {
 		List<String> insertStmts = DataLoader.getPersonMovieSalaryInsertStmt();
 		System.out.println(insertStmts.size());
+	}
+
+	@Test
+	public void testDeleteFile() {
+		Utility.deleteFile(Constants.FILE_PERSON_ROLE_CUMM_COUNT_OF_MOVIE);
+	}
+
+	@Test
+	public void testingForLoop() {
+		for (int i = Constants.MIN_YEAR; i <= Constants.MAX_YEAR; i++) {
+			System.out.println(i);
+		}
 	}
 }

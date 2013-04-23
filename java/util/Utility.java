@@ -3,6 +3,7 @@ package util;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -86,10 +87,48 @@ public class Utility {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}	
+		System.out.println("Written to file successfully");
+	}
+
+	public static void appendDataToFile(String fileName, String content) {
+		FileWriter fstream = null;
+		BufferedWriter out = null;
+		try {
+			fstream = new FileWriter(fileName,true);
+			out = new BufferedWriter(fstream);
+			out.write(content);
+			out.write("\n");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				out.close();
+				fstream.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}		
+	}
+
+	public static void deleteFile(String fileName) {
+		try {
+			File file = new File(fileName);
+			if (file.delete()) {
+				System.out.println(file.getName() + " is deleted!");
+			} else {
+				System.out.println("Delete operation is failed.");
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
 		}
 	}
 
 	public static List<Integer> getYearFromString(String info) {
+		info =  info.replace(","," ");
 		List<Integer> years = new ArrayList<Integer>();
 		Pattern pattern = Pattern.compile("\\d{4}");
 		Matcher matcher = pattern.matcher(info);
@@ -112,6 +151,17 @@ public class Utility {
 			return salary;
 		}
 		return null;
+	}
+	
+	public static int getAnyYearMatchingThreshold(List<Integer> years) {
+		if (years != null && years.size() > 0) {
+			for (Integer year : years) {
+				if (year != 0 && year < Constants.TRAINING_THRESHOLD_YEAR) {
+					return year;
+				}
+			}
+		}
+		return 0;
 	}
 
 }

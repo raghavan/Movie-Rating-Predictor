@@ -9,10 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import util.Constants;
+import util.Utility;
 
 import model.InfoDetail;
 import model.Movie;
 import model.PersonInfoMap;
+import model.PersonRoleYear;
+import model.PersonRoleYearMap;
 
 import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
 
@@ -42,7 +45,6 @@ public class DBHandler {
 			}
 		}
 		return personInfoMap;
-
 	}
 
 	private PersonInfoMap makePersonFromResultSet(ResultSet results) {
@@ -108,6 +110,51 @@ public class DBHandler {
 			e.printStackTrace();
 		}
 		return rs;
+	}
+
+	public PersonRoleYearMap getPersonRoleYearMapGivenQuery(String query, int infoTypeId) {
+		PersonRoleYearMap personRoleYearMap = new PersonRoleYearMap();
+		if (query != null) {
+			PreparedStatement ps;
+			try {
+				ps = DBConnect.getConnection().prepareStatement(query + "?;");
+				ps.setInt(1, infoTypeId);
+				ResultSet results = ps.executeQuery();
+				personRoleYearMap = makePersonRoleYearMapFromResultSet(results);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return personRoleYearMap;
+	}
+	
+	private PersonRoleYearMap makePersonRoleYearMapFromResultSet(ResultSet results) {
+		PersonRoleYearMap personRoleYearMap = new PersonRoleYearMap();
+		if (results != null) {
+			try {
+				while (results.next()) {
+					int personId = results.getInt("person_id");
+					List<Integer> years = Utility.getYearFromString(results.getString("info"));
+					int movieYear = Utility.getAnyYearMatchingThreshold(years);					
+					PersonRoleYear personRoleYear = new PersonRoleYear();
+					personRoleYear.setPersonId(personId);
+					personRoleYear.setRoleId(0);
+					personRoleYear.setYear(movieYear);	
+					if(movieYear != 0){
+						personRoleYearMap.addPersonInfoDetail(personRoleYear, 1);
+					}
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					results.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return personRoleYearMap;
 	}
 
 }

@@ -20,11 +20,18 @@ public interface Constants {
 
 	String CSV_TRAINING_FILE = "files/trainingmodel.csv";
 	String CSV_TESTING_FILE = "files/testingmodel.csv";
+	String CSV_PERSON_ROLE_YEAR_COUNT = "files/personRoleYearMovieCount.csv";
 	
 	String FILE_PERSON_ARTICLE_COUNT_UPDATE_STMT = "files/person_article_count.sql";
 	String FILE_PERSON_MAGAZINE_COUNT_UPDATE_STMT = "files/person_magazine_count.sql";
 	String FILE_PERSON_BIOGRAPHY_COUNT_UPDATE_STMT = "files/person_biography_count.sql";
 	String FILE_PERSON_MOVIE_SALARY = "files/person_movie_salary.sql";
+	String FILE_PERSON_ROLE_CUMM_COUNT_OF_MOVIE = "files/person_role_cumm_count_movies.sql";
+	String FILE_PERSON_ROLE_CUMM_COUNT_OF_ARTICLE = "files/person_role_cumm_count_articles.sql";
+	String FILE_PERSON_ROLE_CUMM_COUNT_OF_MAGAZINE = "files/person_role_cumm_count_magazines.sql";
+	String FILE_PERSON_ROLE_CUMM_COUNT_OF_BIOGRAPHY = "files/person_role_cumm_count_biographies.sql";
+
+	
 
 	
 	String ATTRIBUTE_NAME_FILE = "files/attributeNames.txt";
@@ -32,6 +39,7 @@ public interface Constants {
 	// Symbols
 	String QUOTE = "\"";
 	String COMMA = ",";
+	String AND = " and ";
 
 	// Config
 	int CONFIG_USE_DICT_WORD_BREAK = 0;//0-don't use;1-use	
@@ -47,11 +55,22 @@ public interface Constants {
 	int INFO_BIOGRAPHY_MOVIES =  31;
 	int INFO_SALARY = 27;
 	
+	//Values
+	int MIN_YEAR = 1888;
+	int MAX_YEAR = 2006;
+	
 	
 	//Column Name
 	String COLUMN_PERSON_IN_MOVIE_ARTICLE="count_articles";
 	String COLUMN_PERSON_IN_MOVIE_MAGAZINE = "count_of_magazine_cover";
 	String COLUMN_PERSON_IN_MOVIE_BIOGRAPHY = "count_biographies";
+	
+	String COLUMN_CUMM_COUNT_PERSON_IN_MOVIE_ARTICLE="cum_count_of_articles";
+	String COLUMN_CUMM_COUNT_PERSON_IN_MOVIE_MAGAZINE = "cum_count_of_magazine_covers";
+	String COLUMN_CUMM_COUNT_PERSON_IN_MOVIE_BIOGRAPHY = "cum_count_of_biography_movies";
+	
+	
+	
 	
 	
 	
