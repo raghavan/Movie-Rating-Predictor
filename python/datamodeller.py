@@ -80,7 +80,15 @@ def doKernelReg5(xTrain, yTrain, xTest, yTest):
         print "SGDRegressor MAE = ", mean_absolute_error(yTest, yPred);
         print "RMSE(0.0 best score) ", np.sqrt(mean_squared_error(yTest, yPred));
         return yPred   
-        
+
+def SVC(xTrain, yTrain, xTest, yTest):
+    print "SVM";
+    svmclf = svm.SVC(C=8.0,gamma=0.10,kernel='rbf',probability=True,shrinking=True);
+    svmclf.fit(xTrain,yTrain);
+    yPred = svmclf.predict(xTest);
+    print "SVM classification MAE = ", mean_absolute_error(yTest, yPred);
+    print "RMSE(0.0 best score) ", np.sqrt(mean_squared_error(yTest, yPred));
+    return yPred   
 
         
 class DataModeller:
@@ -96,10 +104,10 @@ class DataModeller:
         testData = np.loadtxt(open(self.test_file, 'rb'), delimiter=';')
         testingLabels = np.loadtxt(open(self.test_label_file, 'rb'), delimiter=';')
                     
-        xTrain = trainingData[:, 2:trainingData.shape[1]-1]
+        xTrain = trainingData[:, 1:trainingData.shape[1]-1]
         yTrain = trainingData[:, trainingData.shape[1] - 1]
         
-        xTest = testData[:, 2:]
+        xTest = testData[:, 1:]
         yTest = testingLabels
         
         
@@ -108,10 +116,12 @@ class DataModeller:
         print "Xtest shape :", xTest.shape
         print "Ytest shape :", yTest.shape
         
-        yPred_lr = doLinearReg(xTrain, yTrain, xTest, yTest)
-        yPred_sg = doSVReg(xTrain, yTrain, xTest, yTest)
-       
-        doKernelReg5(xTrain, yTrain, xTest, yTest)
+        #yPred_lr = doLinearReg(xTrain, yTrain, xTest, yTest)
+        #yPred_sg = doSVReg(xTrain, yTrain, xTest, yTest)       
+        #doKernelReg5(xTrain, yTrain, xTest, yTest)
+        SVC(xTrain, yTrain, xTest, yTest);
+        
+        
        
         
         writeDataToFile(yTest, yPred_lr);
