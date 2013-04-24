@@ -21,29 +21,45 @@ def writeDataToFile(yTest, yPred):
             outputFile.write(str(yPred[i]) + "," + str(yTest[i]) + "\n")
         outputFile.close()
         
-def doLinearReg(xTrain, yTrain, xTest, yTest):
+def writeEvaluationResults(rmse,mae,filename):
+    outputFile = open("../files/"+filename+".csv", 'w+')
+    outputFile.write("RMSE value :"+str(rmse)+" MAE value : "+str(mae))
+    outputFile.close()         
+        
+def doLinearReg(xTrain, yTrain, xTest, yTest):    
         linReg = linear_model.LinearRegression();
         # = RFECV(linReg, step=1, cv=5)
         linReg.fit(xTrain, yTrain);
         yPred = linReg.predict(xTest); 
-        print "Linear regression MAE = ", mean_absolute_error(yTest, yPred);
-        print "RMSE(0.0 best score) ", np.sqrt(mean_squared_error(yTest, yPred))
+        rmse = mean_absolute_error(yTest, yPred)
+        mae = np.sqrt(mean_squared_error(yTest, yPred))
+        print "Linear regression MAE = ", rmse;
+        print "RMSE(0.0 best score) ",mae; 
+        writeEvaluationResults(rmse,mae,"linear_reg");
         return yPred
+    
     
 def doSVReg(xTrain, yTrain, xTest, yTest):
         linReg = SVR();
         linReg.fit(xTrain, yTrain);
         yPred = linReg.predict(xTest); 
-        print "SVR MAE = ", mean_absolute_error(yTest, yPred);
-        print "RMSE(0.0 best score) ", np.sqrt(mean_squared_error(yTest, yPred));
+        rmse = mean_absolute_error(yTest, yPred)
+        mae = np.sqrt(mean_squared_error(yTest, yPred))
+        print "SVR MAE", rmse;
+        print "RMSE(0.0 best score) ",mae; 
+        writeEvaluationResults(rmse,mae,"svr");
+
         return yPred    
 
 def doKernelReg1(xTrain, yTrain, xTest, yTest):
         linReg = NuSVR();
         linReg.fit(xTrain, yTrain);
         yPred = linReg.predict(xTest); 
-        print "NuSVR regression MAE = ", mean_absolute_error(yTest, yPred);
-        print "RMSE(0.0 best score) ", np.sqrt(mean_squared_error(yTest, yPred));
+        rmse = mean_absolute_error(yTest, yPred)
+        mae = np.sqrt(mean_squared_error(yTest, yPred))
+        print "NuSVR MAE", rmse;
+        print "RMSE(0.0 best score) ",mae; 
+        writeEvaluationResults(rmse,mae,"nusvr");
         return yPred   
 
 
@@ -51,8 +67,11 @@ def doKernelReg2(xTrain, yTrain, xTest, yTest):
         linReg = KNeighborsRegressor();
         linReg.fit(xTrain, yTrain);
         yPred = linReg.predict(xTest); 
-        print "KNeighborsRegressor regression MAE = ", mean_absolute_error(yTest, yPred);
-        print "RMSE(0.0 best score) ", np.sqrt(mean_squared_error(yTest, yPred));
+        rmse = mean_absolute_error(yTest, yPred)
+        mae = np.sqrt(mean_squared_error(yTest, yPred))
+        print "KNN MAE", rmse;
+        print "RMSE(0.0 best score) ",mae; 
+        writeEvaluationResults(rmse,mae,"knn");
         return yPred   
 
 
@@ -60,8 +79,11 @@ def doKernelReg3(xTrain, yTrain, xTest, yTest):
         linReg = NearestNeighbors(radius=2.0);
         linReg.fit(xTrain, yTrain);
         yPred = linReg.predict(xTest); 
-        print "NearestNeighbors regression MAE = ", mean_absolute_error(yTest, yPred);
-        print "RMSE(0.0 best score) ", np.sqrt(mean_squared_error(yTest, yPred));
+        rmse = mean_absolute_error(yTest, yPred)
+        mae = np.sqrt(mean_squared_error(yTest, yPred))
+        print "NNR MAE", rmse;
+        print "RMSE(0.0 best score) ",mae; 
+        writeEvaluationResults(rmse,mae,"nnr");
         return yPred   
 
 
@@ -69,16 +91,22 @@ def doKernelReg4(xTrain, yTrain, xTest, yTest):
         linReg = linear_model.ARDRegression();
         linReg.fit(xTrain, yTrain);
         yPred = linReg.predict(xTest); 
-        print "ARDRegression regression MAE = ", mean_absolute_error(yTest, yPred);
-        print "RMSE(0.0 best score) ", np.sqrt(mean_squared_error(yTest, yPred));
+        rmse = mean_absolute_error(yTest, yPred)
+        mae = np.sqrt(mean_squared_error(yTest, yPred))
+        print "ARD reg MAE", rmse;
+        print "RMSE(0.0 best score) ",mae; 
+        writeEvaluationResults(rmse,mae,"ard_reg");
         return yPred   
 
 def doKernelReg5(xTrain, yTrain, xTest, yTest):
         linReg = linear_model.SGDRegressor();
         linReg.fit(xTrain, yTrain);
         yPred = linReg.predict(xTest); 
-        print "SGDRegressor MAE = ", mean_absolute_error(yTest, yPred);
-        print "RMSE(0.0 best score) ", np.sqrt(mean_squared_error(yTest, yPred));
+        rmse = mean_absolute_error(yTest, yPred)
+        mae = np.sqrt(mean_squared_error(yTest, yPred))
+        print "SGD MAE", rmse;
+        print "RMSE(0.0 best score) ",mae; 
+        writeEvaluationResults(rmse,mae,"sgd");
         return yPred   
 
 def SVC(xTrain, yTrain, xTest, yTest):
@@ -86,8 +114,11 @@ def SVC(xTrain, yTrain, xTest, yTest):
     svmclf = svm.SVC(C=8.0,gamma=0.10,kernel='rbf',probability=True,shrinking=True);
     svmclf.fit(xTrain,yTrain);
     yPred = svmclf.predict(xTest);
-    print "SVM classification MAE = ", mean_absolute_error(yTest, yPred);
-    print "RMSE(0.0 best score) ", np.sqrt(mean_squared_error(yTest, yPred));
+    rmse = mean_absolute_error(yTest, yPred)
+    mae = np.sqrt(mean_squared_error(yTest, yPred))
+    print "SVM classification MAE", rmse;
+    print "RMSE(0.0 best score) ",mae; 
+    writeEvaluationResults(rmse,mae,"svm_classify");
     return yPred   
 
         
@@ -116,7 +147,7 @@ class DataModeller:
         print "Xtest shape :", xTest.shape
         print "Ytest shape :", yTest.shape
         
-        #yPred_lr = doLinearReg(xTrain, yTrain, xTest, yTest)
+        yPred_lr = doLinearReg(xTrain, yTrain, xTest, yTest)
         #yPred_sg = doSVReg(xTrain, yTrain, xTest, yTest)       
         #doKernelReg5(xTrain, yTrain, xTest, yTest)
         SVC(xTrain, yTrain, xTest, yTest);
