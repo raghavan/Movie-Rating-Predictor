@@ -12,7 +12,22 @@ from sklearn.svm import SVR
 from sklearn.svm import NuSVR
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.neighbors import NearestNeighbors
+from itertools import imap
 
+def pearsonr(x, y):
+  # Assume len(x) == len(y)
+  n = len(x)
+  sum_x = float(sum(x))
+  sum_y = float(sum(y))
+  sum_x_sq = sum(map(lambda x: pow(x, 2), x))
+  sum_y_sq = sum(map(lambda x: pow(x, 2), y))
+  psum = sum(imap(lambda x, y: x * y, x, y))
+  num = psum - (sum_x * sum_y/n)
+  den = pow((sum_x_sq - pow(sum_x, 2) / n) * (sum_y_sq - pow(sum_y, 2) / n), 0.5)
+  if den == 0: return 0
+  return num / den
+  
+  
 def writeDataToFile(yTest, yPred):
         outputFile = open("../files/predictedratings.csv", 'w+')
         rows = len(yPred)
@@ -24,7 +39,14 @@ def writeDataToFile(yTest, yPred):
 def writeEvaluationResults(rmse,mae,filename):
     outputFile = open("../files/"+filename+".csv", 'w+')
     outputFile.write("RMSE value :"+str(rmse)+" MAE value : "+str(mae))
-    outputFile.close()         
+    outputFile.close()     
+        
+def evaluateCorrelationResults(xTrain,yTrain):
+    outputFile = open("../files/correlation.csv", 'w+')
+    for i in range(1,xTrain.shape[1]):
+        correlation = pearsonr(xTrain[:,i],yTrain)
+        outputFile.write("i = "+str(i)+" pearson correlation = "+str(correlation)+"\n")
+    outputFile.close()             
         
 def doLinearReg(xTrain, yTrain, xTest, yTest):    
         linReg = linear_model.LinearRegression();
@@ -40,7 +62,7 @@ def doLinearReg(xTrain, yTrain, xTest, yTest):
     
     
 def doSVReg(xTrain, yTrain, xTest, yTest):
-        linReg = SVR();
+        linReg = SVR(degree=2,gamma=0.5,probability=True,shrinking=True);
         linReg.fit(xTrain, yTrain);
         yPred = linReg.predict(xTest); 
         rmse = mean_absolute_error(yTest, yPred)
@@ -142,15 +164,18 @@ class DataModeller:
         yTest = testingLabels
         
         
+        
         print "Xtrain shape :", xTrain.shape
         print "Ytrain shape :", yTrain.shape
         print "Xtest shape :", xTest.shape
         print "Ytest shape :", yTest.shape
         
-        yPred_lr = doLinearReg(xTrain, yTrain, xTest, yTest)
-        #yPred_sg = doSVReg(xTrain, yTrain, xTest, yTest)       
+        evaluateCorrelationResults(xTrain,yTrain)
+        
+        #yPred_lr = doLinearReg(xTrain, yTrain, xTest, yTest)
+        yPred_sg = doSVReg(xTrain, yTrain, xTest, yTest)       
         #doKernelReg5(xTrain, yTrain, xTest, yTest)
-        SVC(xTrain, yTrain, xTest, yTest);
+        #SVC(xTrain, yTrain, xTest, yTest);
         
         
        
