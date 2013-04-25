@@ -37,7 +37,7 @@ def writeDataToFile(yTest, yPred):
         outputFile.close()
         
 def writeEvaluationResults(rmse,mae,filename):
-    outputFile = open("../files/"+filename+".csv", 'w+')
+    outputFile = open("../files/"+filename+"_new.csv", 'w+')
     outputFile.write("RMSE value :"+str(rmse)+" MAE value : "+str(mae))
     outputFile.close()     
         
@@ -217,17 +217,17 @@ class DataModeller:
         
         #yPred_lr = doLinearReg(xTrain, yTrain, xTest, yTest)
         yPred_sg = doSVReg(xTrain, yTrain, xTest, yTest)
-        yPred_sg = doSVReg1(xTrain, yTrain, xTest, yTest)
-        yPred_sg = doSVReg2(xTrain, yTrain, xTest, yTest)
-        yPred_sg = doSVReg3(xTrain, yTrain, xTest, yTest)
-        yPred_sg = doSVReg4(xTrain, yTrain, xTest, yTest)       
+        doSVReg1(xTrain, yTrain, xTest, yTest)
+        doSVReg2(xTrain, yTrain, xTest, yTest)
+        doSVReg3(xTrain, yTrain, xTest, yTest)
+        doSVReg4(xTrain, yTrain, xTest, yTest)       
         #doKernelReg5(xTrain, yTrain, xTest, yTest)
         #SVC(xTrain, yTrain, xTest, yTest);
         
         
        
         
-        writeDataToFile(yTest, yPred_lr);
+        writeDataToFile(yTest, yPred_sg);
                            
 if __name__ == '__main__':
     if len(sys.argv) < 3:       
