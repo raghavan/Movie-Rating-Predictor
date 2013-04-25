@@ -70,8 +70,51 @@ def doSVReg(xTrain, yTrain, xTest, yTest):
         print "SVR MAE", rmse;
         print "RMSE(0.0 best score) ",mae; 
         writeEvaluationResults(rmse,mae,"svr");
+        return yPred  
 
-        return yPred    
+def doSVReg1(xTrain, yTrain, xTest, yTest):
+        linReg = SVR(degree=6,gamma=0.5,probability=True,shrinking=True);
+        linReg.fit(xTrain, yTrain);
+        yPred = linReg.predict(xTest); 
+        rmse = mean_absolute_error(yTest, yPred)
+        mae = np.sqrt(mean_squared_error(yTest, yPred))
+        print "SVR1 MAE", rmse;
+        print "RMSE(0.0 best score) ",mae; 
+        writeEvaluationResults(rmse,mae,"svr1");
+        return yPred 
+           
+def doSVReg2(xTrain, yTrain, xTest, yTest):
+        linReg = SVR(degree=2,gamma=0.8,probability=True,shrinking=True);
+        linReg.fit(xTrain, yTrain);
+        yPred = linReg.predict(xTest); 
+        rmse = mean_absolute_error(yTest, yPred)
+        mae = np.sqrt(mean_squared_error(yTest, yPred))
+        print "SVR2 MAE", rmse;
+        print "RMSE(0.0 best score) ",mae; 
+        writeEvaluationResults(rmse,mae,"svr2");
+        return yPred   
+
+def doSVReg3(xTrain, yTrain, xTest, yTest):
+        linReg = SVR(degree=6,gamma=0.8,probability=True,shrinking=True);
+        linReg.fit(xTrain, yTrain);
+        yPred = linReg.predict(xTest); 
+        rmse = mean_absolute_error(yTest, yPred)
+        mae = np.sqrt(mean_squared_error(yTest, yPred))
+        print "SVR3 MAE", rmse;
+        print "RMSE(0.0 best score) ",mae; 
+        writeEvaluationResults(rmse,mae,"svr3");
+        return yPred
+
+def doSVReg4(xTrain, yTrain, xTest, yTest):
+        linReg = SVR(degree=2,gamma=0.2,probability=True,shrinking=True);
+        linReg.fit(xTrain, yTrain);
+        yPred = linReg.predict(xTest); 
+        rmse = mean_absolute_error(yTest, yPred)
+        mae = np.sqrt(mean_squared_error(yTest, yPred))
+        print "SVR4 MAE", rmse;
+        print "RMSE(0.0 best score) ",mae; 
+        writeEvaluationResults(rmse,mae,"svr4");
+        return yPred                        
 
 def doKernelReg1(xTrain, yTrain, xTest, yTest):
         linReg = NuSVR();
@@ -173,7 +216,11 @@ class DataModeller:
         evaluateCorrelationResults(xTrain,yTrain)
         
         #yPred_lr = doLinearReg(xTrain, yTrain, xTest, yTest)
-        yPred_sg = doSVReg(xTrain, yTrain, xTest, yTest)       
+        yPred_sg = doSVReg(xTrain, yTrain, xTest, yTest)
+        yPred_sg = doSVReg1(xTrain, yTrain, xTest, yTest)
+        yPred_sg = doSVReg2(xTrain, yTrain, xTest, yTest)
+        yPred_sg = doSVReg3(xTrain, yTrain, xTest, yTest)
+        yPred_sg = doSVReg4(xTrain, yTrain, xTest, yTest)       
         #doKernelReg5(xTrain, yTrain, xTest, yTest)
         #SVC(xTrain, yTrain, xTest, yTest);
         
