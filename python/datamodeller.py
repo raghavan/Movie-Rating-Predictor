@@ -62,7 +62,7 @@ def doLinearReg(xTrain, yTrain, xTest, yTest):
     
     
 def doSVReg(xTrain, yTrain, xTest, yTest):
-        linReg = SVR(degree=2,gamma=0.5,probability=True,shrinking=True);
+        linReg = SVR(kernel='sigmoid',degree=2,gamma=0.5,probability=True,shrinking=True);
         linReg.fit(xTrain, yTrain);
         yPred = linReg.predict(xTest); 
         rmse = mean_absolute_error(yTest, yPred)
@@ -73,7 +73,7 @@ def doSVReg(xTrain, yTrain, xTest, yTest):
         return yPred  
 
 def doSVReg1(xTrain, yTrain, xTest, yTest):
-        linReg = SVR(degree=6,gamma=0.5,probability=True,shrinking=True);
+        linReg = SVR(kernel='rbf',degree=1,gamma=0.5,probability=True,shrinking=True);
         linReg.fit(xTrain, yTrain);
         yPred = linReg.predict(xTest); 
         rmse = mean_absolute_error(yTest, yPred)
@@ -84,7 +84,7 @@ def doSVReg1(xTrain, yTrain, xTest, yTest):
         return yPred 
            
 def doSVReg2(xTrain, yTrain, xTest, yTest):
-        linReg = SVR(degree=2,gamma=0.8,probability=True,shrinking=True);
+        linReg = SVR(degree=0.5,gamma=0.8,probability=True,shrinking=True);
         linReg.fit(xTrain, yTrain);
         yPred = linReg.predict(xTest); 
         rmse = mean_absolute_error(yTest, yPred)
